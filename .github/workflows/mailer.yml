@@ -3,7 +3,7 @@ name: Daily Mailer
 on:
   schedule:
     - cron: "10 1 * * *"   # Runs at 6:40 AM IST (1:10 AM UTC)
-  workflow_dispatch:       # allows manual run too
+  workflow_dispatch:       # Allows manual run too
 
 jobs:
   run-mailer:
