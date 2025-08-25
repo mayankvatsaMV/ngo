@@ -201,8 +201,8 @@
 
 
 
-import nodemailer from "nodemailer";
-import xlsx from "xlsx";
+const nodemailer = require("nodemailer");
+import xlsx =require("xlsx");
 
 // ---------------- Nodemailer setup ----------------
 const transporter = nodemailer.createTransport({
