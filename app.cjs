@@ -114,6 +114,62 @@ Mayank
     console.error("Error sending emails:", err.message);
   }
 }
+// ---------------- Donation Confirmation Emails ----------------
+async function sendDonationEmails() {
+  try {
+    const donations = getDonorsFromExcel("./donations.xlsx");
+
+    if (!donations.length) {
+      console.log("❌ No donation records found in Excel");
+      return;
+    }
+
+    let sentCount = 0;
+
+    for (let donation of donations) {
+      const { Name, Email, Donation_Date, Amount, Donation_Type, Payment_Mode, Transaction_ID, Notes } = donation;
+
+      if (!Email) {
+        console.log("⚠️ Skipped a row due to missing email");
+        continue;
+      }
+
+      const message = `
+Dear ${Name},
+
+🙏 Thank you for your generous donation on ${formatDate(Donation_Date)}.  
+Details of your donation are as follows:
+
+- Donation Type: ${Donation_Type}
+- Amount: ${Amount || "N/A"}
+- Payment Mode: ${Payment_Mode || "N/A"}
+- Transaction ID: ${Transaction_ID || "-"}
+
+Your support makes a huge difference! 💙  
+
+Best regards,  
+Mayank  
+      `;
+
+      await transporter.sendMail({
+        from: '"NGO Team" <mayankvatsa2@gmail.com>',
+        to: Email,
+        subject: "Thank you for your donation 🙏",
+        text: message
+      });
+
+      console.log(`✅ Donation email sent to ${Name} (${Email})`);
+      sentCount++;
+    }
+
+    console.log(`\nSummary: Donation emails sent: ${sentCount}`);
+
+  } catch (err) {
+    console.error("Error sending donation emails:", err.message);
+  }
+}
+
 
 // ---------------- Run script ----------------
 sendEmails();
+sendDonationEmails(); 
